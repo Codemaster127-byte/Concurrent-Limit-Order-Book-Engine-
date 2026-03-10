@@ -1,5 +1,5 @@
-#ifndef queue_h
-#define queue_h
+#ifndef main_h
+#define main_h
 #define QUEUE_SIZE 1000
 #define MAX_ORDERS 1000
 #include <time.h>
