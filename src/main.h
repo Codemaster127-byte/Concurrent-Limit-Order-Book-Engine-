@@ -35,5 +35,14 @@ typedef struct {
 
 } OrderBook;
 
+// enqueue and dequeue used in queue.c
+OrderQueue* init_queue(void);
+void enqueue(OrderQueue* oq, Order o);
+Order dequeue(OrderQueue* oq);
+
+// header for producer
+Order generate_random_order(void);
+void *producer(void* arg);
+
 
 #endif
