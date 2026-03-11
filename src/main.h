@@ -22,6 +22,7 @@ typedef struct {
     Order buffer[QUEUE_SIZE];
     int head;
     int tail;
+    int side;
     pthread_mutex_t lock;
     pthread_cond_t not_empty;
     pthread_cond_t not_full;
@@ -41,6 +42,8 @@ typedef struct {
 extern OrderQueue queue;
 extern OrderBook orderbook;
 
+extern int ltp;
+
 extern int running;
 extern int order_id;
 
@@ -56,6 +59,8 @@ void *producer(void* arg);
 void *matching_engine(void *arg);
 
 void process_order(Order *o);
+
+extern double lambda = 0.5;   // 5 orders per 10 seconds
 
 
 #endif
