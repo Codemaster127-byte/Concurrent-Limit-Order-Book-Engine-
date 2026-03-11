@@ -19,6 +19,7 @@ typedef struct {
     Order buffer[QUEUE_SIZE];
     int head;
     int tail;
+    int side;
     pthread_mutex_t lock;
     pthread_cond_t not_empty;
     pthread_cond_t not_full;
