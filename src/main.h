@@ -2,6 +2,9 @@
 #define main_h
 #define QUEUE_SIZE 1000
 #define MAX_ORDERS 1000
+
+#define BUY 0
+#define SELL 1
 #include <time.h>
 #include<pthread.h>
 
@@ -36,14 +39,24 @@ typedef struct {
 
 } OrderBook;
 
+extern OrderQueue queue;
+extern OrderBook orderbook;
+
+extern int running;
+extern int order_id;
+
 // enqueue and dequeue used in queue.c
-OrderQueue* init_queue(void);
+void init_queue(OrderQueue *oq);
 void enqueue(OrderQueue* oq, Order o);
 Order dequeue(OrderQueue* oq);
 
 // header for producer
 Order generate_random_order(void);
 void *producer(void* arg);
+
+void *matching_engine(void *arg);
+
+void process_order(Order *o);
 
 
 #endif

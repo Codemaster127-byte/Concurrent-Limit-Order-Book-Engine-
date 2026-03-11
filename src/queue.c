@@ -40,12 +40,10 @@ Order dequeue(OrderQueue* oq){
     return order;
 }
 
-OrderQueue* init_queue() {
-    OrderQueue* oq;
+void init_queue(OrderQueue *oq) {
     oq->head = 0;
     oq->tail = 0;
     pthread_mutex_init(&oq->lock, NULL);
     pthread_cond_init(&oq->not_empty, NULL);
     pthread_cond_init(&oq->not_full, NULL);
-    return oq;
 }
