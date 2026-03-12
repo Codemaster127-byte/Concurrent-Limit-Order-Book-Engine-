@@ -38,7 +38,8 @@ void* producer(void* arg) {
 
         enqueue(&queue, o);
         double wait = rand_exponential(lambda);
-        printf("order sent waiting");
+        printf("order sent waiting\n");
+        printf("%d %d ",o.price,o.side);
         usleep(wait*1e6);
     }
 

@@ -28,6 +28,9 @@ int main() {
 
     pthread_t producers[3];
     pthread_t engine;
+    printf("main func started\n"); 
+    fflush(stdout);
+
 
     /* create producer threads (used 4 here, can try any reasonable number) */
     for (int i = 0; i < 3; i++) {
