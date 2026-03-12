@@ -15,6 +15,8 @@ void process_order(Order *o) {
 
                 printf("TRADE: BUY %d matched with SELL %d | price=%d qty=%d\n", o->id, sell->id, sell->price, traded_qty);
 
+                atomic_store(&ltp,sell->price);
+
                 o->quantity -= traded_qty;
                 sell->quantity -= traded_qty;
 
@@ -44,7 +46,9 @@ void process_order(Order *o) {
             if (buy->price >= o->price) {
                 int traded_qty = (o->quantity < buy->quantity) ? o->quantity : buy->quantity;
 
-                printf("TRADE: SELL %d matched with BUY %d | price=%d qty=%d\n", o->id, buy->id, buy->price, traded_qty);
+                 printf("TRADE: SELL %d matched with BUY %d | price=%d qty=%d\n", o->id, buy->id, buy->price, traded_qty);
+ 
+                atomic_store(&ltp,buy->price);
 
                 o->quantity -= traded_qty;
                 buy->quantity -= traded_qty;
