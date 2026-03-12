@@ -14,10 +14,12 @@ extern int order_id;
 Order generate_random_order(void) {
     Order o;
 
+    double ltp1=atomic_load(&ltp);
+
     o.id = __sync_fetch_and_add(&order_id, 1);
-    o.price = rand_normal(ltp);
+    o.price = rand_normal(ltp1);
     o.quantity = 1 + (rand() % 100);
-    o.side = (o.price<ltp)? 0:1;
+    o.side = (o.price<ltp1)? 0:1;
 
     struct timespec ts;
     if (clock_gettime(CLOCK_MONOTONIC, &ts) == 0) {
@@ -36,6 +38,7 @@ void* producer(void* arg) {
 
         enqueue(&queue, o);
         double wait = rand_exponential(lambda);
+        printf("order sent waiting");
         usleep(wait*1e6);
     }
 

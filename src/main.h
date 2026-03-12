@@ -7,6 +7,8 @@
 #define SELL 1
 #include <time.h>
 #include<pthread.h>
+#include <stdatomic.h>
+
 
 
 typedef struct {
@@ -42,7 +44,7 @@ typedef struct {
 extern OrderQueue queue;
 extern OrderBook orderbook;
 
-extern int ltp;
+extern _Atomic double ltp;
 
 extern int running;
 extern int order_id;
@@ -60,7 +62,10 @@ void *matching_engine(void *arg);
 
 void process_order(Order *o);
 
-extern double lambda = 0.5;   // 5 orders per 10 seconds
+double rand_normal(double ltp);
+double rand_exponential(double lambda);
+
+extern double lambda ;   
 
 
 #endif
