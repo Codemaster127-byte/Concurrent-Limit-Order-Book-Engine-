@@ -4,6 +4,7 @@
 #include <time.h>
 
 #include "main.h"
+#include "metrics.h"
 
 extern OrderQueue queue;
 extern int running;
@@ -17,12 +18,8 @@ Order generate_random_order(void) {
     o.quantity = 1 + (rand() % 100);
     o.side = rand() % 2;
 
-    struct timespec ts;
-    if (clock_gettime(CLOCK_MONOTONIC, &ts) == 0) {
-        o.timestamp = ts.tv_sec * 1000000000L + ts.tv_nsec;
-    } else {
-        o.timestamp = 0;  // used a fallback here
-    }
+    clock_gettime(CLOCK_MONOTONIC, &o.created_time);
+    // removed the nanosecond timestamp field
 
     return o;
 }
