@@ -1,5 +1,5 @@
 #include "main.h"
-
+#include<stdio.h>
 
 void enqueue(OrderQueue* oq,Order o){
     pthread_mutex_lock(&oq->lock);
@@ -12,6 +12,7 @@ void enqueue(OrderQueue* oq,Order o){
 
     oq->buffer[oq->tail]=o;
     oq->tail=(oq->tail+1)%QUEUE_SIZE;
+    //printf("%d -> q\n",o.price);
 
     pthread_cond_signal(&oq->not_empty);
 
@@ -31,6 +32,7 @@ Order dequeue(OrderQueue* oq){
 
     Order order = oq->buffer[oq->head];
     oq->head = (oq->head + 1) % QUEUE_SIZE;
+    //printf("q -> %d\n",order.price);
 
 
     pthread_cond_signal(&oq->not_full);

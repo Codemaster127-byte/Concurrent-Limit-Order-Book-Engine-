@@ -6,8 +6,9 @@ extern int running;
 void *matching_engine(void *arg) {
     while(running) {
         Order o = dequeue(&queue);
-
+        
         process_order(&o);
+        //printf("order processed\n");
     }
 
     return NULL;

@@ -2,7 +2,7 @@
 #define main_h
 #define QUEUE_SIZE 1000
 #define MAX_ORDERS 1000
-
+#include<stdio.h>
 #define BUY 0
 #define SELL 1
 #include <time.h>

@@ -19,7 +19,13 @@ Order generate_random_order(void) {
     o.id = __sync_fetch_and_add(&order_id, 1);
     o.price = rand_normal(ltp1);
     o.quantity = 1 + (rand() % 100);
-    o.side = (o.price<ltp1)? 0:1;
+    double prob = (double)rand() / RAND_MAX;
+    if(prob>0.85){
+        o.side = (o.price<ltp1)? 1:0;
+    }
+    else{
+        o.side = (o.price<ltp1)? 0:1;
+    }
 
     struct timespec ts;
     if (clock_gettime(CLOCK_MONOTONIC, &ts) == 0) {
@@ -35,11 +41,10 @@ void* producer(void* arg) {
 
     while(running) {
         Order o = generate_random_order();
+        //printf("%d %d \n",o.price,o.side);
 
         enqueue(&queue, o);
         double wait = rand_exponential(lambda);
-        printf("order sent waiting\n");
-        printf("%d %d ",o.price,o.side);
         usleep(wait*1e6);
     }
 
@@ -54,7 +59,7 @@ double rand_normal(double ltp)
 
     double z0 = sqrt(-2.0 * log(u1)) * cos(2.0 * M_PI * u2);
 
-    return ltp + z0 * (ltp*0.10);
+    return ltp + z0 * (ltp*0.005);
 }
 
 
