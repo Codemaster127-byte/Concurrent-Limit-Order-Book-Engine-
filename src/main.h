@@ -16,7 +16,8 @@ typedef struct {
     int price;
     int quantity;
     int side;        // 0 = BUY, 1 = SELL
-    long timestamp;
+    
+    struct timespec created_time;
 } Order;
 
 
@@ -65,7 +66,7 @@ void process_order(Order *o);
 double rand_normal(double ltp);
 double rand_exponential(double lambda);
 
-extern double lambda ;   
+extern double lambda ;
 
 
 #endif

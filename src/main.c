@@ -5,9 +5,11 @@
 #include <time.h>
 
 #include "main.h"
+#include "metrics.h"
 
 OrderQueue queue;
 OrderBook orderbook;
+Metrics metrics;
 
 int running = 1;
 int order_id = 1;
@@ -19,6 +21,10 @@ _Atomic double ltp = 800.00;
 
 int main() {
     srand(time(NULL));
+
+    // initialise metrics before starting threads
+    metrics_init(&metrics);
+    metrics_start(&metrics);
 
     init_queue(&queue);
     atomic_store(&ltp,800.0);
@@ -46,6 +52,9 @@ int main() {
     }
 
     pthread_join(engine, NULL);
+
+    metrics_end(&metrics); // after all threads have been closed
+    metrics_report(&metrics);
 
     return 0;
 }
