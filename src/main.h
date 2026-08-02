@@ -1,71 +1,38 @@
-#ifndef main_h
-#define main_h
-#define QUEUE_SIZE 1000
-#define MAX_ORDERS 1000
-#include<stdio.h>
-#define BUY 0
-#define SELL 1
-#include <time.h>
-#include<pthread.h>
-#include <stdatomic.h>
+#pragma once
 
+#include <cstdint>
+#include <list>
+#include <map>
+#include <vector>
 
+using OrderId = std::uint64_t;
+using Price = std::int64_t;
+using Quantity = std::uint64_t;
 
-typedef struct {
-    int id;
-    int price;
-    int quantity;
-    int side;        // 0 = BUY, 1 = SELL
-    long timestamp;
-} Order;
+enum Side { BUY, SELL };
 
+struct Order {
+    OrderId id;
+    Price price;
+    Quantity quantity;
+    Side side;
+};
 
-typedef struct {
-    Order buffer[QUEUE_SIZE];
-    int head;
-    int tail;
-    int side;
-    pthread_mutex_t lock;
-    pthread_cond_t not_empty;
-    pthread_cond_t not_full;
-} OrderQueue;
+struct PriceLevel {
+    Quantity total{};
+    std::list<Order> orders;
+};
 
-typedef struct {
-    Order buy_orders[MAX_ORDERS];
-    Order sell_orders[MAX_ORDERS];
-    int buy_count;
-    int sell_count;
+struct Trade {
+    OrderId buy_id;
+    OrderId sell_id;
+    Price price;
+    Quantity quantity;
+};
 
-    pthread_mutex_t buy_lock;
-    pthread_mutex_t sell_lock;
+struct OrderBook {
+    std::map<Price, PriceLevel, std::greater<Price>> buys;
+    std::map<Price, PriceLevel> sells;
+};
 
-} OrderBook;
-
-extern OrderQueue queue;
-extern OrderBook orderbook;
-
-extern _Atomic double ltp;
-
-extern int running;
-extern int order_id;
-
-// enqueue and dequeue used in queue.c
-void init_queue(OrderQueue *oq);
-void enqueue(OrderQueue* oq, Order o);
-Order dequeue(OrderQueue* oq);
-
-// header for producer
-Order generate_random_order(void);
-void *producer(void* arg);
-
-void *matching_engine(void *arg);
-
-void process_order(Order *o);
-
-double rand_normal(double ltp);
-double rand_exponential(double lambda);
-
-extern double lambda ;   
-
-
-#endif
+std::vector<Trade> process_order(OrderBook* book, Order order);
