@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <list>
 #include <map>
+#include <unordered_map>
 #include <vector>
 
 using OrderId = std::uint64_t;
@@ -30,9 +31,18 @@ struct Trade {
     Quantity quantity;
 };
 
+struct Location {
+    Side side;
+    Price price;
+    std::list<Order>::iterator order;
+};
+
 struct OrderBook {
     std::map<Price, PriceLevel, std::greater<Price>> buys;
     std::map<Price, PriceLevel> sells;
+    std::unordered_map<OrderId, Location> by_id;
 };
 
 std::vector<Trade> process_order(OrderBook* book, Order order);
+bool cancel_order(OrderBook* book, OrderId id);
+std::vector<Trade> replace_order(OrderBook* book, OrderId id, Price price, Quantity quantity);
