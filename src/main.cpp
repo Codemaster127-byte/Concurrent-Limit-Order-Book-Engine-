@@ -16,5 +16,10 @@ int main() {
                   << " quantity=" << trade.quantity << '\n';
     }
 
+    replace_order(&book, 2, 102, 5);
+    std::cout << "replaced order 2 quantity=" << book.sells.begin()->second.total << '\n';
+    cancel_order(&book, 2);
+    std::cout << "sell levels after cancel=" << book.sells.size() << '\n';
+
     return 0;
 }
